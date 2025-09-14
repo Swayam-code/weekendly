@@ -14,7 +14,7 @@ export interface Activity {
 export interface ScheduledActivity extends Activity {
   originalActivityId?: string; // Reference to the original activity ID
   scheduledTime: Date;
-  day: 'saturday' | 'sunday';
+  day: 'friday' | 'saturday' | 'sunday' | 'monday';
   order: number;
 }
 
@@ -60,8 +60,11 @@ export interface WeekendPlan {
   id: string;
   name: string;
   theme?: WeekendTheme;
+  friday?: ScheduledActivity[];
   saturday: ScheduledActivity[];
   sunday: ScheduledActivity[];
+  monday?: ScheduledActivity[];
+  isLongWeekend?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

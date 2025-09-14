@@ -10,7 +10,7 @@ export const timeOfDayToHours: Record<TimeOfDay, number[]> = {
 
 export function suggestTimeForActivity(
   activity: Activity,
-  day: 'saturday' | 'sunday',
+  day: 'friday' | 'saturday' | 'sunday' | 'monday',
   existingActivities: ScheduledActivity[]
 ): Date {
   // Get preferred times for this activity
@@ -39,11 +39,27 @@ export function suggestTimeForActivity(
     );
 
     if (!hasConflict) {
-      // Create date for Saturday or Sunday
+      // Create date for the specified day
       const today = new Date();
-      const dayOffset = day === 'saturday' ? 
-        (6 - today.getDay() + 7) % 7 : 
-        (7 - today.getDay()) % 7;
+      let dayOffset: number;
+      
+      switch (day) {
+        case 'friday':
+          dayOffset = (5 - today.getDay() + 7) % 7;
+          break;
+        case 'saturday':
+          dayOffset = (6 - today.getDay() + 7) % 7;
+          break;
+        case 'sunday':
+          dayOffset = (7 - today.getDay()) % 7;
+          break;
+        case 'monday':
+          dayOffset = (1 - today.getDay() + 7) % 7;
+          if (dayOffset === 0) dayOffset = 7; // Next Monday if today is Monday
+          break;
+        default:
+          dayOffset = 0;
+      }
       
       const scheduledDate = new Date(today);
       scheduledDate.setDate(today.getDate() + dayOffset);
@@ -65,9 +81,25 @@ export function suggestTimeForActivity(
 
     if (!hasConflict) {
       const today = new Date();
-      const dayOffset = day === 'saturday' ? 
-        (6 - today.getDay() + 7) % 7 : 
-        (7 - today.getDay()) % 7;
+      let dayOffset: number;
+      
+      switch (day) {
+        case 'friday':
+          dayOffset = (5 - today.getDay() + 7) % 7;
+          break;
+        case 'saturday':
+          dayOffset = (6 - today.getDay() + 7) % 7;
+          break;
+        case 'sunday':
+          dayOffset = (7 - today.getDay()) % 7;
+          break;
+        case 'monday':
+          dayOffset = (1 - today.getDay() + 7) % 7;
+          if (dayOffset === 0) dayOffset = 7; // Next Monday if today is Monday
+          break;
+        default:
+          dayOffset = 0;
+      }
       
       const scheduledDate = new Date(today);
       scheduledDate.setDate(today.getDate() + dayOffset);

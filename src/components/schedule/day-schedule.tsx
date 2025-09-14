@@ -27,12 +27,20 @@ import {
 } from '@dnd-kit/sortable';
 
 interface DayScheduleProps {
-  day: 'saturday' | 'sunday';
+  day: 'friday' | 'saturday' | 'sunday' | 'monday';
   activities: ScheduledActivity[];
-  title: string;
+  title?: string;
+  showHeader?: boolean;
+  onReorder?: (activities: ScheduledActivity[]) => void;
 }
 
-export function DaySchedule({ day, activities, title }: DayScheduleProps) {
+export function DaySchedule({ 
+  day, 
+  activities, 
+  title, 
+  showHeader = true,
+  onReorder 
+}: DayScheduleProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { reorderActivities } = useAppStore();
   
@@ -52,7 +60,11 @@ export function DaySchedule({ day, activities, title }: DayScheduleProps) {
 
       if (oldIndex !== -1 && newIndex !== -1) {
         const reorderedActivities = arrayMove(activities, oldIndex, newIndex);
-        reorderActivities(day, reorderedActivities);
+        if (onReorder) {
+          onReorder(reorderedActivities);
+        } else {
+          reorderActivities(day, reorderedActivities);
+        }
       }
     }
   }
@@ -76,29 +88,31 @@ export function DaySchedule({ day, activities, title }: DayScheduleProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center space-x-2">
-            <Calendar className="h-5 w-5 text-purple-600" />
-            <span className="text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              {title}
-            </span>
-          </CardTitle>
-          
-          {activities.length > 0 && (
-            <div className="flex items-center space-x-2">
-              <Badge variant="secondary" className="text-xs">
-                {getActivityCount()} {getActivityCount() === 1 ? 'activity' : 'activities'}
-              </Badge>
-              <Badge variant="outline" className="text-xs">
-                {formatTotalDuration(getTotalDuration())}
-              </Badge>
-            </div>
-          )}
-        </div>
-      </CardHeader>
+      {showHeader && title && (
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center space-x-2">
+              <Calendar className="h-5 w-5 text-purple-600" />
+              <span className="text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                {title}
+              </span>
+            </CardTitle>
+            
+            {activities.length > 0 && (
+              <div className="flex items-center space-x-2">
+                <Badge variant="secondary" className="text-xs">
+                  {getActivityCount()} {getActivityCount() === 1 ? 'activity' : 'activities'}
+                </Badge>
+                <Badge variant="outline" className="text-xs">
+                  {formatTotalDuration(getTotalDuration())}
+                </Badge>
+              </div>
+            )}
+          </div>
+        </CardHeader>
+      )}
 
-      <CardContent className="pt-0 space-y-3">
+      <CardContent className={`${showHeader ? 'pt-0' : 'pt-4'} space-y-3`}>
         {activities.length === 0 ? (
           <motion.div
             key="empty-state"

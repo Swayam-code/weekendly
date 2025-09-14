@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AppLayout } from '@/components/layout/app-layout';
 import { ActivityGrid } from '@/components/activities/activity-grid';
 import { WeekendSchedule } from '@/components/schedule/weekend-schedule';
+import { OfflineIndicator } from '@/components/ui/offline-indicator';
 import { useKeyboardShortcuts, createShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useServiceWorker } from '@/hooks/use-service-worker';
 import { useAppStore } from '@/stores/app-store';
 import { toast } from 'sonner';
 import { KeyboardShortcutsHelp } from '@/components/ui/KeyboardShortcutsHelp';
@@ -22,6 +24,30 @@ export default function Home() {
     exportPlanAsJSON, 
     clearFilters 
   } = useAppStore();
+
+  // Service worker and offline functionality
+  const serviceWorker = useServiceWorker();
+
+  // Show update available notification
+  useEffect(() => {
+    if (serviceWorker.updateAvailable) {
+      toast('App Update Available', {
+        description: 'A new version is ready to install',
+        action: {
+          label: 'Update',
+          onClick: serviceWorker.updateServiceWorker,
+        },
+        duration: 10000,
+      });
+    }
+  }, [serviceWorker.updateAvailable]);
+
+  // Register background sync when data changes
+  useEffect(() => {
+    if (serviceWorker.isRegistered) {
+      serviceWorker.requestBackgroundSync('background-sync-schedule');
+    }
+  }, [savePlan]);
 
   // Setup keyboard shortcuts
   const shortcuts = createShortcuts({
@@ -60,6 +86,7 @@ export default function Home() {
 
   return (
     <AppLayout>
+      <OfflineIndicator />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

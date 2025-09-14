@@ -5,7 +5,7 @@ import { validateSchedule } from '@/lib/scheduling';
 
 interface ScheduleValidatorProps {
   activities: ScheduledActivity[];
-  day: 'saturday' | 'sunday';
+  day: 'friday' | 'saturday' | 'sunday' | 'monday';
 }
 
 export function ScheduleValidator({ activities, day }: ScheduleValidatorProps) {

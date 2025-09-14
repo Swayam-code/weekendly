@@ -28,9 +28,9 @@ interface AppStore {
   initializeApp: () => void;
   createNewPlan: (name?: string) => void;
   setSelectedTheme: (theme: WeekendTheme | null) => void;
-  addActivityToPlan: (activity: Activity, day: 'saturday' | 'sunday', time?: Date) => void;
+  addActivityToPlan: (activity: Activity, day: 'friday' | 'saturday' | 'sunday' | 'monday', time?: Date) => void;
   removeActivityFromPlan: (activityId: string) => void;
-  reorderActivities: (day: 'saturday' | 'sunday', activities: ScheduledActivity[]) => void;
+  reorderActivities: (day: 'friday' | 'saturday' | 'sunday' | 'monday', activities: ScheduledActivity[]) => void;
   updateActivityTime: (activityId: string, newTime: Date) => void;
   savePlan: () => void;
   loadPlan: (planId: string) => void;
@@ -112,8 +112,13 @@ export const useAppStore = create<AppStore>()(
         const { currentPlan } = get();
         if (!currentPlan) return;
         
+        // Initialize day array if it doesn't exist (for friday/monday)
+        if (!currentPlan[day]) {
+          currentPlan[day] = [];
+        }
+        
         // Use smart scheduling if no time is provided
-        const suggestedTime = time || suggestTimeForActivity(activity, day, currentPlan[day]);
+        const suggestedTime = time || suggestTimeForActivity(activity, day, currentPlan[day] || []);
         
         const scheduledActivity: ScheduledActivity = {
           ...activity,
@@ -121,12 +126,12 @@ export const useAppStore = create<AppStore>()(
           originalActivityId: activity.id, // Keep reference to original activity
           scheduledTime: suggestedTime,
           day,
-          order: currentPlan[day].length,
+          order: currentPlan[day]?.length || 0,
         };
         
         const updatedPlan = {
           ...currentPlan,
-          [day]: [...currentPlan[day], scheduledActivity],
+          [day]: [...(currentPlan[day] || []), scheduledActivity],
           updatedAt: new Date(),
         };
         
@@ -139,8 +144,10 @@ export const useAppStore = create<AppStore>()(
         
         const updatedPlan = {
           ...currentPlan,
+          ...(currentPlan.friday && { friday: currentPlan.friday.filter(a => a.id !== activityId) }),
           saturday: currentPlan.saturday.filter(a => a.id !== activityId),
           sunday: currentPlan.sunday.filter(a => a.id !== activityId),
+          ...(currentPlan.monday && { monday: currentPlan.monday.filter(a => a.id !== activityId) }),
           updatedAt: new Date(),
         };
         

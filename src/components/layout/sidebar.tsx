@@ -1,18 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Filter, Palette, Plus, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Filter, Palette, Plus, Sparkles, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAppStore } from '@/stores/app-store';
 import { ThemeSelector } from '@/components/common/theme-selector';
 import { ActivityFilters } from '@/components/activities/activity-filters';
+import { HolidaySuggestions } from '@/components/holidays/HolidaySuggestions';
 import { toast } from 'sonner';
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [activeTab, setActiveTab] = useState<'themes' | 'filters'>('themes');
+  const [activeTab, setActiveTab] = useState<'themes' | 'filters' | 'holidays'>('themes');
   const { weekendThemes, selectedTheme, createNewPlan } = useAppStore();
 
   const handleNewPlan = () => {
@@ -61,6 +62,15 @@ export function Sidebar() {
         >
           <Filter className="h-5 w-5" />
         </Button>
+        <Button
+          variant={activeTab === 'holidays' ? 'default' : 'ghost'}
+          size="sm"
+          onClick={() => setActiveTab('holidays')}
+          className="p-3 hover:bg-purple-100/50 transition-colors"
+          title="Holiday Planning"
+        >
+          <Calendar className="h-5 w-5" />
+        </Button>
       </div>
     );
   }
@@ -101,27 +111,40 @@ export function Sidebar() {
           variant={activeTab === 'themes' ? 'default' : 'ghost'}
           size="sm"
           onClick={() => setActiveTab('themes')}
-          className={`flex-1 rounded-none border-0 ${
+          className={`flex-1 rounded-none border-0 text-xs ${
             activeTab === 'themes' 
               ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-sm' 
               : 'text-gray-600 hover:text-gray-800 hover:bg-purple-50/50'
           }`}
         >
-          <Palette className="h-4 w-4 mr-2" />
+          <Palette className="h-3 w-3 mr-1" />
           Themes
         </Button>
         <Button
           variant={activeTab === 'filters' ? 'default' : 'ghost'}
           size="sm"
           onClick={() => setActiveTab('filters')}
-          className={`flex-1 rounded-none border-0 ${
+          className={`flex-1 rounded-none border-0 text-xs ${
             activeTab === 'filters' 
               ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-sm' 
               : 'text-gray-600 hover:text-gray-800 hover:bg-purple-50/50'
           }`}
         >
-          <Filter className="h-4 w-4 mr-2" />
+          <Filter className="h-3 w-3 mr-1" />
           Filters
+        </Button>
+        <Button
+          variant={activeTab === 'holidays' ? 'default' : 'ghost'}
+          size="sm"
+          onClick={() => setActiveTab('holidays')}
+          className={`flex-1 rounded-none border-0 text-xs ${
+            activeTab === 'holidays' 
+              ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-sm' 
+              : 'text-gray-600 hover:text-gray-800 hover:bg-purple-50/50'
+          }`}
+        >
+          <Calendar className="h-3 w-3 mr-1" />
+          Holidays
         </Button>
       </div>
 
@@ -164,6 +187,16 @@ export function Sidebar() {
               Filter Activities
             </div>
             <ActivityFilters />
+          </div>
+        )}
+
+        {activeTab === 'holidays' && (
+          <div className="space-y-4">
+            <div className="text-sm font-medium text-gray-700 mb-4 flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-purple-600" />
+              Holiday Planning
+            </div>
+            <HolidaySuggestions />
           </div>
         )}
       </div>

@@ -16,6 +16,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Weekendly - Plan Your Perfect Weekend",
   description: "A beautiful weekend planner app to organize activities, discover new experiences, and make the most of your free time.",
+  manifest: "/manifest.json",
+  themeColor: "#8b5cf6",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Weekendly",
+  },
 };
 
 export default function RootLayout({
@@ -30,6 +38,7 @@ export default function RootLayout({
       >
         {children}
         <Toaster position="bottom-right" richColors />
+        <div id="service-worker-update-portal" />
       </body>
     </html>
   );
