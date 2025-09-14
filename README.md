@@ -1,7 +1,5 @@
 # 🌟 Weekendly - Your Perfect Weekend Planner
 
-> *A modern, feature-rich weekend planning application built for the Atlan Frontend Engineering Internship Challenge 2025*
-
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
 [![Tests](https://img.shields.io/badge/tests-20%2F20%20passing-success)]()
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)]()
@@ -9,6 +7,7 @@
 [![Accessibility](https://img.shields.io/badge/accessibility-WCAG%202.1%20AA-green)]()
 
 An intuitive, delightful web application that transforms weekend planning from a chore into a creative experience. Design your perfect Saturday-Sunday schedule with smart suggestions, beautiful themes, and seamless interactions.
+<img width="1902" height="822" alt="image" src="https://github.com/user-attachments/assets/bdaa8623-17eb-4c58-8bcb-aea0d98319d4" />
 
 ## ✨ Live Demo
 
