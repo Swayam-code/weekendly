@@ -29,7 +29,7 @@ export function Header() {
     setIsSaving(true);
     await new Promise(resolve => setTimeout(resolve, 500)); // Brief loading state
     savePlan();
-    toast.success('💾 Plan saved successfully!');
+    toast.success('Plan saved successfully!');
     setIsSaving(false);
   };
 
@@ -38,7 +38,7 @@ export function Header() {
     await new Promise(resolve => setTimeout(resolve, 300));
     const result = exportPlanAsJSON();
     if (result) {
-      toast.success('📄 Plan exported as JSON!');
+      toast.success('Plan exported as JSON!');
     } else {
       toast.error('No plan to export');
     }
@@ -50,7 +50,7 @@ export function Header() {
     await new Promise(resolve => setTimeout(resolve, 300));
     const result = exportPlanAsText();
     if (result) {
-      toast.success('📝 Plan exported as text!');
+      toast.success('Plan exported as text!');
     } else {
       toast.error('No plan to export');
     }
@@ -62,7 +62,7 @@ export function Header() {
     await new Promise(resolve => setTimeout(resolve, 300));
     const link = generateShareableLink();
     if (link) {
-      toast.success('🔗 Share link copied!', {
+      toast.success('Share link copied!', {
         description: 'Link copied to clipboard'
       });
     } else {

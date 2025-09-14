@@ -51,8 +51,7 @@ export function ActivityCard({ activity, showAddButton = true }: ActivityCardPro
     addActivityToPlan(activity, day);
     
     toast.success(`Added to ${day.charAt(0).toUpperCase() + day.slice(1)}!`, {
-      description: activity.name,
-      icon: '✅'
+      description: activity.name
     });
     
     setIsAdding(false);
@@ -70,16 +69,17 @@ export function ActivityCard({ activity, showAddButton = true }: ActivityCardPro
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -2, scale: 1.01 }}
+      className="transition-all duration-200 h-full w-full"
     >
       <Card 
-        className="group cursor-pointer hover:shadow-lg transition-all duration-200 border-0 bg-white/80 backdrop-blur-sm focus-within:ring-2 focus-within:ring-purple-500"
+        className="group cursor-pointer hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm focus-within:ring-2 focus-within:ring-purple-500 overflow-hidden h-full flex flex-col min-h-[240px]"
         tabIndex={0}
         role="article"
         aria-label={`Activity: ${activity.name}`}
       >
-        <CardContent className="p-4">
-          <div className="flex items-start space-x-3">
+        <CardContent className="p-4 flex flex-col h-full">
+          <div className="flex items-start space-x-3 flex-1">
             <div 
               className={`p-2.5 rounded-xl ${activity.color} shadow-sm flex-shrink-0`}
               aria-hidden="true"
@@ -89,7 +89,7 @@ export function ActivityCard({ activity, showAddButton = true }: ActivityCardPro
               )}
             </div>
             
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 flex flex-col h-full">
               <div className="flex items-start justify-between mb-2">
                 <h3 className="font-semibold text-gray-900 text-sm leading-tight">
                   {activity.name}
@@ -103,75 +103,30 @@ export function ActivityCard({ activity, showAddButton = true }: ActivityCardPro
                 </div>
               </div>
               
-              <p className="text-xs text-gray-600 mb-3 line-clamp-2">
+              <p className="text-xs text-gray-600 mb-3 line-clamp-2 flex-1">
                 {activity.description}
               </p>
               
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Badge 
-                    variant="secondary" 
-                    className={`text-xs ${categoryColors[activity.category]}`}
-                    aria-label={`Category: ${activity.category}`}
-                  >
-                    {activity.category}
-                  </Badge>
-                  <span 
-                    className="text-sm font-medium text-gray-600"
-                    aria-label={`Mood: ${moodEmojis[activity.mood]}`}
-                  >
-                    {moodEmojis[activity.mood]}
-                  </span>
-                </div>
-                
-                {showAddButton && (
-                  <div 
-                    className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                    role="group"
-                    aria-label="Add to schedule"
-                  >
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleAddToDay('saturday')}
-                      disabled={isAdding}
-                      className="h-7 px-2 text-xs hover:bg-purple-50 hover:border-purple-200 disabled:opacity-50"
-                      aria-label={`Add ${activity.name} to Saturday`}
-                    >
-                      {isAdding ? (
-                        <div 
-                          className="h-3 w-3 animate-spin rounded-full border-2 border-purple-300 border-t-purple-600 mr-1"
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <Plus className="h-3 w-3 mr-1" aria-hidden="true" />
-                      )}
-                      Sat
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleAddToDay('sunday')}
-                      disabled={isAdding}
-                      className="h-7 px-2 text-xs hover:bg-purple-50 hover:border-purple-200 disabled:opacity-50"
-                      aria-label={`Add ${activity.name} to Sunday`}
-                    >
-                      {isAdding ? (
-                        <div 
-                          className="h-3 w-3 animate-spin rounded-full border-2 border-purple-300 border-t-purple-600 mr-1"
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <Plus className="h-3 w-3 mr-1" aria-hidden="true" />
-                      )}
-                      Sun
-                    </Button>
-                  </div>
-                )}
+              {/* Category and Mood */}
+              <div className="flex items-center space-x-2 mb-2">
+                <Badge 
+                  variant="secondary" 
+                  className={`text-xs ${categoryColors[activity.category]}`}
+                  aria-label={`Category: ${activity.category}`}
+                >
+                  {activity.category}
+                </Badge>
+                <span 
+                  className="text-sm font-medium text-gray-600"
+                  aria-label={`Mood: ${moodEmojis[activity.mood]}`}
+                >
+                  {moodEmojis[activity.mood]}
+                </span>
               </div>
               
+              {/* Tags */}
               {activity.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-2">
+                <div className="flex flex-wrap gap-1 mb-3">
                   {activity.tags.slice(0, 3).map((tag) => (
                     <Badge 
                       key={tag} 
@@ -190,6 +145,52 @@ export function ActivityCard({ activity, showAddButton = true }: ActivityCardPro
               )}
             </div>
           </div>
+          
+          {/* Add to Schedule Buttons - Always at bottom */}
+          {showAddButton && (
+            <div 
+              className="flex justify-center space-x-2 mt-auto pt-3 border-t border-gray-100 transition-all duration-200"
+              role="group"
+              aria-label="Add to schedule"
+            >
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleAddToDay('saturday')}
+                disabled={isAdding}
+                className="h-7 px-3 text-xs hover:bg-purple-50 hover:border-purple-200 disabled:opacity-50 flex-1 max-w-20"
+                aria-label={`Add ${activity.name} to Saturday`}
+              >
+                {isAdding ? (
+                  <div 
+                    className="h-3 w-3 animate-spin rounded-full border-2 border-purple-300 border-t-purple-600 mr-1"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <Plus className="h-3 w-3 mr-1" aria-hidden="true" />
+                )}
+                Sat
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleAddToDay('sunday')}
+                disabled={isAdding}
+                className="h-7 px-3 text-xs hover:bg-purple-50 hover:border-purple-200 disabled:opacity-50 flex-1 max-w-20"
+                aria-label={`Add ${activity.name} to Sunday`}
+              >
+                {isAdding ? (
+                  <div 
+                    className="h-3 w-3 animate-spin rounded-full border-2 border-purple-300 border-t-purple-600 mr-1"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <Plus className="h-3 w-3 mr-1" aria-hidden="true" />
+                )}
+                Sun
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
     </motion.div>

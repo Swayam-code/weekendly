@@ -18,7 +18,7 @@ export function ThemeSelector() {
       });
     } else {
       setSelectedTheme(theme);
-      toast.success(`🎨 ${theme.name} theme selected!`, {
+      toast.success(`${theme.name} theme selected!`, {
         description: `${theme.suggestedActivities.length} activities will be auto-suggested`
       });
     }

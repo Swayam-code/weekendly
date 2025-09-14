@@ -18,7 +18,7 @@ export function Sidebar() {
 
   const handleNewPlan = () => {
     createNewPlan();
-    toast.success('✨ New weekend plan created!', {
+    toast.success('New weekend plan created!', {
       description: 'Start adding activities to plan your perfect weekend'
     });
   };

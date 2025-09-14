@@ -104,23 +104,23 @@ export function ExtendedWeekendSchedule({
   const totalDuration = days.reduce((total, day) => total + getTotalDuration(day), 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-full overflow-hidden">
       {/* Header with stats */}
       <Card className="bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200">
         <CardHeader className="pb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Sparkles className="h-5 w-5 text-purple-600" />
-              <CardTitle className="text-lg bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center space-x-2 min-w-0">
+              <Sparkles className="h-5 w-5 text-purple-600 flex-shrink-0" />
+              <CardTitle className="text-lg bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent truncate">
                 {isLongWeekend ? 'Long Weekend Plan' : 'Weekend Plan'}
               </CardTitle>
               {isLongWeekend && (
-                <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+                <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white flex-shrink-0">
                   {days.length} Days
                 </Badge>
               )}
             </div>
-            <div className="flex items-center space-x-4 text-sm text-gray-600">
+            <div className="flex items-center space-x-4 text-sm text-gray-600 flex-shrink-0">
               <div className="flex items-center space-x-1">
                 <Calendar className="h-4 w-4" />
                 <span>{totalActivities} activities</span>
@@ -136,7 +136,7 @@ export function ExtendedWeekendSchedule({
       </Card>
 
       {/* Day schedules */}
-      <div className="space-y-4">
+      <div className="space-y-4 max-w-full overflow-hidden">
         <AnimatePresence>
           {days.map((day, index) => (
             <motion.div
@@ -146,15 +146,15 @@ export function ExtendedWeekendSchedule({
               exit={{ opacity: 0, y: -20 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className="overflow-hidden border-gray-200 hover:shadow-md transition-shadow">
+              <Card className="overflow-hidden border-gray-200 hover:shadow-md transition-shadow max-w-full">
                 <CardHeader 
                   className={`cursor-pointer bg-gradient-to-r ${getDayColor(day)} text-white`}
                   onClick={() => toggleDayExpansion(day)}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <h3 className="text-lg font-semibold">{getDayLabel(day)}</h3>
-                      <Badge variant="secondary" className="bg-white/20 text-white">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <div className="flex items-center space-x-3 min-w-0">
+                      <h3 className="text-lg font-semibold truncate">{getDayLabel(day)}</h3>
+                      <Badge variant="secondary" className="bg-white/20 text-white flex-shrink-0">
                         {getActivityCount(day)} activities
                       </Badge>
                       {getTotalDuration(day) > 0 && (
@@ -167,7 +167,7 @@ export function ExtendedWeekendSchedule({
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-white hover:bg-white/20"
+                      className="text-white hover:bg-white/20 flex-shrink-0"
                     >
                       {expandedDays[day] ? (
                         <ChevronUp className="h-4 w-4" />
